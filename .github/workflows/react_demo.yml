@@ -24,6 +24,7 @@ jobs:
           cd react_demo
           npm test
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
