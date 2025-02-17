@@ -1,8 +1,9 @@
-name: React Project Test
+name: Deploy React Project
 on: 
   push:
     paths:
       - 'react_demo/**'
+      - '.github/workflows/react_demo.yml'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,3 +23,23 @@ jobs:
         run: |
           cd react_demo
           npm test
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      # We don't have to install nodeJS here as the ubuntu-latest runner has it      
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 18
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci
+      - name: Build Project
+        run: |
+          cd react_demo
+          npm run build
+      - name: Deploy Project
+        run: echo "Deploying... (dummy deploy step)"
