@@ -14,9 +14,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Enter project directory
-        run: cd react_demo
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          cd react_demo
+          npm ci
       - name: Run Tests
-        run: npm test
+        run: |
+          cd react_demo
+          npm test
