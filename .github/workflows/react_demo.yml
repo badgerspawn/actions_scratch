@@ -4,6 +4,7 @@ on:
     paths:
       - 'react_demo/**'
       - '.github/workflows/react_demo.yml'
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
