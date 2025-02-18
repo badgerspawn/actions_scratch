@@ -1,8 +1,22 @@
 name: Reusable Exercise
-on: workflow_call
+on: 
+  workflow_call:
+    inputs:
+      artifact-name:
+        type: string
+        description: The name of the deployable artifact
+        required: false
+        default: dist
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Get code
+        uses: actions/checkout@v3
+        with:
+          name: ${{ inputs.artifact-name }}
+      - name: List Files
+        run: ls -lah
       - name: Write message
         run: echo "Reusable workflow step"
