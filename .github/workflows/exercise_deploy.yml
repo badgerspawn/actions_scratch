@@ -22,7 +22,7 @@ jobs:
       - name: Run Project linting
         run: |
           cd react_demo
-          npm lint
+          npm run lint
   test:
     runs-on: ubuntu-latest
     steps:
