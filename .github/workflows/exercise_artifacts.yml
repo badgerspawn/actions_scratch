@@ -1,0 +1,72 @@
+name: Deployment Exercise
+on:
+  push:
+    paths:
+      - 'react_demo/**'
+  workflow_dispatch:
+jobs: 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci                
+      - name: Run Project linting
+        run: |
+          cd react_demo
+          npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci          
+      - name: Run Tests
+        run: |
+          cd react_demo
+          npm run test
+  build: 
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci        
+      - name: Build Project
+        run: |
+          cd react_demo
+          npm run build     
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: |
+            dist
+            package.json
+  deploy: 
+    needs: build
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Deploy Project
+        run: echo "Deploying... (dummy deploy step)"
