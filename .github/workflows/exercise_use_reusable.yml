@@ -104,6 +104,8 @@ jobs:
     uses: ./.github/workflows/exercise_reusable.yml
     with:
       artifact-name: dist-files
+    secrets:
+      some_secret: ${{ secrets.some_secret }}
   report:
     needs: [lint, deploy]
     if: failure()
