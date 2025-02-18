@@ -17,7 +17,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: react_demo/node_modules
-          key: deps-node-modules-${{hashfiles('**/package-lock.json')}}
+          key: cond-flow-deps-${{hashfiles('**/package-lock.json')}}
       - name: Install Dependencies
         if: steps.cache_deps.outputs.cache-hit != 'true'
         run: |
@@ -34,7 +34,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: react_demo/node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: cond-flow-deps-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache_deps.outputs.cache-hit != 'true'
         run: |
@@ -55,7 +55,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: cond-flow-deps-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache_deps.outputs.cache-hit != 'true'
         run: |
@@ -83,7 +83,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: cond-flow-deps-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache_deps.outputs.cache-hit != 'true'      
         run: |
