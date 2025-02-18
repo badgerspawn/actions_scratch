@@ -1,4 +1,4 @@
-name: Deployment Exercise
+name: Artifact Exercise
 on:
   push:
     paths:
