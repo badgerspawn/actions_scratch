@@ -15,9 +15,10 @@ jobs:
       #   uses: actions/setup-node@v3
       #   with:
       #     node-version: 18
-      - uses: actions/cache@v3
+      - name: Cache Dependencies
+        uses: actions/cache@v3
         with:
-          path: ~/react_demo/.npm
+          path: ~/.npm
           key: deps-node-modules-${{hashfiles('**/package-lock.json')}}
       - name: Install Dependencies
         run: |
@@ -32,9 +33,10 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - name: Cache Dependencies
+        uses: actions/cache@v3
         with:
-          path: ~/react_demo/.npm
+          path: ~/.npm
           key: deps-node-modules-${{hashfiles('**/package-lock.json')}}        
       - name: Install Dependencies
         run: |
@@ -52,9 +54,10 @@ jobs:
     steps: 
       - name: Get Code
         uses: actions/checkout@v3
-      - uses: actions/cache@v3
+      - name: Cache Dependencies
+        uses: actions/cache@v3
         with:
-          path: ~/react_demo/.npm
+          path: ~/.npm
           key: deps-node-modules-${{hashfiles('**/package-lock.json')}}        
       - name: Install Dependencies
         run: |
