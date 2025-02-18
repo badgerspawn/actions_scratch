@@ -73,6 +73,6 @@ jobs:
         with:
           name: dist-files
       - name: Output Contents
-        run: la -lah
+        run: ls -lah
       - name: Deploy Project
         run: echo "Deploying... (dummy deploy step)"
