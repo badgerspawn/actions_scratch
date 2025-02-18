@@ -5,8 +5,8 @@ on:
       - 'react_demo/**'
       - '.github/workflows/exercise_deploy.yml'
   workflow_dispatch:
-jobs:
-  setup:
+jobs: 
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -18,19 +18,24 @@ jobs:
       - name: Install Dependencies
         run: |
           cd react_demo
-          npm ci      
-  lint:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:        
+          npm ci                
       - name: Run Project linting
         run: |
           cd react_demo
           npm lint
   test:
-    needs: setup
     runs-on: ubuntu-latest
-    steps:  
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci          
       - name: Run Tests
         run: |
           cd react_demo
