@@ -1,0 +1,47 @@
+name: Deployment Exercise
+on:
+  push:
+    paths:
+      - 'react_demo/**'
+      - '.github/workflows/react_demo.yml'
+  workflow_dispatch:
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci      
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:        
+      - name: Run Project linting
+        run: |
+          cd react_demo
+          npm lint
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Run Tests
+        run: |
+          cd react_demo
+          npm test
+  deploy: 
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Build Project
+        run: |
+          cd react_demo
+          npm run build
+      - name: Deploy Project
+        run: echo "Deploying... (dummy deploy step)"
