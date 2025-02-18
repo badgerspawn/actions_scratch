@@ -1,0 +1,8 @@
+name: Reusable Exercise
+on: workflow_call
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write message
+        run: echo "Reusable workflow step"
