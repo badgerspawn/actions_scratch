@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - 'react_demo/**'
-      - '.github/workflows/react_demo.yml'
+      - '.github/workflows/exercise_deploy.yml'
   workflow_dispatch:
 jobs:
   setup:
