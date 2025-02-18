@@ -7,18 +7,36 @@ on:
       - 'react_demo/**'
   workflow_dispatch:
 jobs:
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Cache Dependencies
+        id: cache_deps
+        uses: actions/cache@v3
+        with:
+          path: react_demo/node_modules
+          key: deps-node-modules-${{hashfiles('**/package-lock.json')}}
+      - name: Install Dependencies
+        if: steps.cache_deps.outputs.cache-hit != 'true'
+        run: |
+          cd react_demo
+          npm ci    
   lint:
+    needs: cache
     runs-on: ubuntu-latest
     steps:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        id: cache
+        id: cache_deps
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: react_demo/node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache_deps.outputs.cache-hit != 'true'
         run: |
           cd react_demo
           npm ci
@@ -27,17 +45,19 @@ jobs:
           cd react_demo
           npm run lint
   test:
+    needs: cache
     runs-on: ubuntu-latest
     steps:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        id: cache
+        id: cache_deps
         uses: actions/cache@v3
         with:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache_deps.outputs.cache-hit != 'true'
         run: |
           cd react_demo
           npm ci
@@ -59,12 +79,13 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        id: cache
+        id: cache_deps
         uses: actions/cache@v3
         with:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache_deps.outputs.cache-hit != 'true'      
         run: |
           cd react_demo
           npm ci
