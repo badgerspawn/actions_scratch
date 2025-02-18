@@ -1,0 +1,88 @@
+name: Caching Exercise
+on:
+  push:
+    paths:
+      - 'react_demo/**'
+  workflow_dispatch:
+jobs: 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      # NOTE npm is installed on ubuntu latest so not strictly necessary
+      # - name: Setup NodeJS
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18
+      - uses: actions/cache@v3
+        with:
+          path: ~/react_demo/.npm
+          key: deps-node-modules-${{hashfiles('**/package-lock.json')}}
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci                
+      - name: Run Project linting
+        run: |
+          cd react_demo
+          npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ~/react_demo/.npm
+          key: deps-node-modules-${{hashfiles('**/package-lock.json')}}        
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci          
+      - name: Run Tests
+        run: |
+          cd react_demo
+          npm run test
+  build: 
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{steps.publish_jsfilename.outputs.script-file}}
+    steps: 
+      - name: Get Code
+        uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ~/react_demo/.npm
+          key: deps-node-modules-${{hashfiles('**/package-lock.json')}}        
+      - name: Install Dependencies
+        run: |
+          cd react_demo
+          npm ci        
+      - name: Build Project
+        run: |
+          cd react_demo
+          npm run build     
+      - name: Publish JS filename
+        id: publish_jsfilename
+        run: find react_demo/dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: react_demo/dist
+  deploy: 
+    needs: build
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: Output Contents
+        run: ls -lah
+      - name: Output FileName
+        run: echo "${{needs.build.outputs.script-file}}"
+      - name: Deploy Project
+        run: echo "Deploying... (dummy deploy step)"
