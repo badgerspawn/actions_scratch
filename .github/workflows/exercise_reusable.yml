@@ -7,18 +7,27 @@ on:
         description: The name of the deployable artifact
         required: false
         default: dist
+    outputs:
+      result:
+        description: The result of the step
+        value: ${{ jobs.deploy.outputs.outcome }}
     secrets:
       some_secret:
         required: false
 jobs:
   deploy:
+    outputs:
+      outcome: ${{ steps.set-result.outputs.step-result }}
     runs-on: ubuntu-latest
     steps:
       - name: Get code
-        uses: actions/checkout@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
       - name: List Files
         run: ls -lah
       - name: Write message
         run: echo "Reusable workflow step"
+      - name: Set result output
+        id: set-result
+        run: echo "step-result=success" >> $GITHUB_OUTPUT
