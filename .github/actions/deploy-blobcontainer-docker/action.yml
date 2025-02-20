@@ -1,0 +1,8 @@
+name: Deploy to Azure Blob Container
+description: 'Deploy a static website to Azure Blob Container'
+runs:
+  using: docker
+  image: Dockerfile
+# TODO:
+# add the inputs for azure blob container
+# add the outputs for azure url
