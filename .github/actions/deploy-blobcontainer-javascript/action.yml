@@ -1,0 +1,5 @@
+name: Deploy to Azure Blob Container
+description: 'Deploy a static website to Azure Blob Container'
+runs:
+  using: node20
+  main: main.js
