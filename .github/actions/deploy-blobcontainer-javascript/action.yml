@@ -3,3 +3,6 @@ description: 'Deploy a static website to Azure Blob Container'
 runs:
   using: node20
   main: main.js
+# TODO:
+# add the inputs for azure blob container
+# add the outputs for azure url
