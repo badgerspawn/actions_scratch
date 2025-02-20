@@ -1,17 +1,33 @@
 name: Get and cache dependencies
 description: 'Get the dependencies and cache them.'
+inputs:
+  caching:
+    description: 'Force caching'
+    required: true
+    default: 'true'
+  codepath:
+    description: 'The path to the code'
+    required: false
+    default: '.'
+outputs:
+  used-cache:
+    description: 'Whether the cache was used'
+    value: ${{ steps.install.outputs.cache }}
 runs:
   using: composite
   steps:
     - name: cache dependencies
+      if: inputs.caching == 'true'
       id: cache
       uses: actions/cache@v3
       with:
-        path: react_demo/node_modules
-        key: actions-node-modules-${{ hashFiles('**/package-lock.json') }}
+        path: ${{inputs.codepath}}/node_modules
+        key: ${{inputs.codepath}}-${{ hashFiles('**/package-lock.json') }}
     - name: install dependencies
+      id: install
       shell: bash
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
       run: |
-        cd react_demo
+        cd ${{inputs.codepath}}
         npm ci
+        echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
