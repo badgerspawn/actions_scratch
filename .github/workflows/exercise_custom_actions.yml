@@ -1,4 +1,4 @@
-name: Deployment
+name: Custom Action Deployment
 on:
   push:
     paths:
